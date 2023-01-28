@@ -279,7 +279,35 @@ class Ui_MainWindow(object):
         self.le_cost_for_number.setText('160')
 
     def from_invoice(self):
-        pass
+        path = QFileDialog.getOpenFileName(
+            self.centralwidget,
+            "Открыть файл",
+            "",
+            "PDF (*.pdf)"
+        )
+        if path[0]:
+            table = parse_pdf(path[0])
+            divisions_cost = 0
+            personal_cost = 0
+            subscription_cost = 0
+            minutes_cost = 0
+            for row in table:
+                value = row[1].replace(',', '.').replace(' ', '')
+                if 'Дополнительная группа пользователей' in row[0]:
+                    divisions_cost += float(value)
+                if 'Дополнительные внутренние номера' in row[0]:
+                    personal_cost += float(value)
+                if 'Безлимитная запись' in row[0] or \
+                        'ОАТС Про' in row[0] or \
+                        'Интеграция с CRM' in row[0] or \
+                        'Алгоритм распред' in row[0]:
+                    subscription_cost += float(value)
+                if 'Минут' in row[0]:
+                    minutes_cost += float(value)
+            self.le_divisions.setText(str(round(divisions_cost, 2)))
+            self.le_personal.setText(str(round(personal_cost, 2)))
+            self.le_subscription.setText(str(round(subscription_cost, 2)))
+            self.le_minuts.setText(str(round(minutes_cost, 2)))
 
     def save_report(self):
         s_fname = QFileDialog.getSaveFileName(
@@ -319,14 +347,14 @@ class Ui_MainWindow(object):
                                      self.end_date.date().month(),
                                      self.end_date.date().day())
         _divisions = calculate_expenses_by_divisions(
-                                                    int(self.le_personal.text()),
-                                                    int(self.le_divisions.text()),
-                                                    int(self.le_subscription.text()))
+                                                    float(self.le_personal.text()),
+                                                    float(self.le_divisions.text()),
+                                                    float(self.le_subscription.text()))
         _phones = calculate_expenses_by_numbers(
-                                                int(self.le_cost_for_number.text()),
+                                                float(self.le_cost_for_number.text()),
                                                 _start_date,
                                                 _end_date,
-                                                int(self.le_minuts.text()))
+                                                float(self.le_minuts.text()))
         _final = _divisions.merge(_phones, on='id')
         self.tableView.horizontalHeader().setStretchLastSection(True)
         self.tableView.setAlternatingRowColors(True)

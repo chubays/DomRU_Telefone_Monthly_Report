@@ -1,6 +1,7 @@
 import pandas as pd
 from pathlib import Path
 import datetime
+import pdfplumber
 
 PATH_TO_STATISTIC = Path(r"tel_data/")
 
@@ -157,6 +158,13 @@ def calculate_expenses_by_numbers(number_cost, start_date, end_date, conversatio
     return merged
 
 
+def parse_pdf(path_to_pdf_file):
+    with pdfplumber.open(path_to_pdf_file) as pdf:
+        page = pdf.pages[0]
+        table = page.extract_table()
+    return table
+
+
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     pd.set_option('display.max_columns', None)
@@ -194,10 +202,11 @@ if __name__ == '__main__':
     # merged.columns = ['id', 'duration', 'cost_for_calls', 'cost_for_numbers']
     # print(merged)
     final = divisions.merge(phones, on='id')
-    final['total'] = final['cost_for_employees'] + final['cost_for_departments'] +\
+    final['total'] = final['cost_for_employees'] + final['cost_for_departments'] + \
                      final['cost_for_subscription'] + final['cost_for_calls'] + final['cost_for_numbers']
     final.to_csv('result.csv', encoding='UTF-8', sep=';', index=False)
-    print(final[['name', 'cost_for_employees', 'cost_for_departments', 'cost_for_subscription', 'cost_for_calls', 'cost_for_numbers', 'total']])
+    print(final[['name', 'cost_for_employees', 'cost_for_departments', 'cost_for_subscription', 'cost_for_calls',
+                 'cost_for_numbers', 'total']])
     print(f' Total {final.total.sum()}')
     print(f' cost_for_numbers {final.cost_for_numbers.sum()}')
     print(f' cost_for_calls {final.cost_for_calls.sum()}')
