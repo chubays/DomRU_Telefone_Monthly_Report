@@ -4,7 +4,7 @@ from main import *
 
 from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
                             QMetaObject, QObject, QPoint, QRect,
-                            QSize, QTime, QUrl, Qt, QAbstractTableModel, QModelIndex)
+                            QSize, QTime, QUrl, Qt, QAbstractTableModel, QModelIndex, QStringListModel)
 from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
                            QFont, QFontDatabase, QGradient, QIcon,
                            QImage, QKeySequence, QLinearGradient, QPainter,
@@ -12,7 +12,8 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWidgets import (QApplication, QDateEdit, QGroupBox, QHBoxLayout,
                                QHeaderView, QLabel, QMainWindow, QPushButton,
                                QSizePolicy, QStatusBar, QTabWidget, QTableWidget,
-                               QTableWidgetItem, QVBoxLayout, QWidget, QTableView, QGridLayout, QLineEdit, QFileDialog)
+                               QTableWidgetItem, QVBoxLayout, QWidget, QTableView, QGridLayout, QLineEdit, QFileDialog,
+                               QListView, QLayout)
 
 
 class PandasModel(QAbstractTableModel):
@@ -84,7 +85,6 @@ class Ui_MainWindow(object):
         self.tab.setObjectName(u"tab")
         self.gridLayout = QGridLayout(self.tab)
         self.gridLayout.setObjectName(u"gridLayout")
-
         self.groupBox = QGroupBox(self.tab)
         self.groupBox.setObjectName(u"groupBox")
         self.verticalLayout_2 = QVBoxLayout(self.groupBox)
@@ -122,6 +122,7 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_3.addWidget(self.end_date)
 
+
         self.verticalLayout_2.addWidget(self.groupBox_2)
 
         self.btn_calculate = QPushButton(self.groupBox)
@@ -145,6 +146,7 @@ class Ui_MainWindow(object):
         self.label_4.setObjectName(u"label_4")
 
         self.verticalLayout_2.addWidget(self.label_4)
+
 
         self.gridLayout.addWidget(self.groupBox, 0, 3, 1, 1)
 
@@ -180,10 +182,10 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout.addWidget(self.label_7)
 
-        self.le_divisions = QLineEdit(self.groupBox_3)
-        self.le_divisions.setObjectName(u"le_divisions")
+        self.le_divisions_cost = QLineEdit(self.groupBox_3)
+        self.le_divisions_cost.setObjectName(u"le_divisions_cost")
 
-        self.horizontalLayout.addWidget(self.le_divisions)
+        self.horizontalLayout.addWidget(self.le_divisions_cost)
 
         self.label_8 = QLabel(self.groupBox_3)
         self.label_8.setObjectName(u"label_8")
@@ -213,6 +215,7 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout.addWidget(self.btn_from_invoice)
 
+
         self.gridLayout.addWidget(self.groupBox_3, 1, 1, 1, 3)
 
         self.tableView = QTableView(self.tab)
@@ -223,6 +226,135 @@ class Ui_MainWindow(object):
         self.tabWidget.addTab(self.tab, "")
         self.tab_2 = QWidget()
         self.tab_2.setObjectName(u"tab_2")
+        self.gridLayout_2 = QGridLayout(self.tab_2)
+        self.gridLayout_2.setObjectName(u"gridLayout_2")
+        self.groupBox_4 = QGroupBox(self.tab_2)
+        self.groupBox_4.setObjectName(u"groupBox_4")
+        self.verticalLayout_4 = QVBoxLayout(self.groupBox_4)
+        self.verticalLayout_4.setObjectName(u"verticalLayout_4")
+        self.verticalLayout_4.setSizeConstraint(QLayout.SetMaximumSize)
+        self.lv_divisions = QListView(self.groupBox_4)
+        self.lv_divisions.setObjectName(u"lv_divisions")
+
+        self.verticalLayout_4.addWidget(self.lv_divisions)
+
+
+        self.gridLayout_2.addWidget(self.groupBox_4, 0, 0, 1, 1)
+
+        self.groupBox_5 = QGroupBox(self.tab_2)
+        self.groupBox_5.setObjectName(u"groupBox_5")
+        self.horizontalLayout_2 = QHBoxLayout(self.groupBox_5)
+        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
+        self.verticalLayout_5 = QVBoxLayout()
+        self.verticalLayout_5.setObjectName(u"verticalLayout_5")
+        self.label_10 = QLabel(self.groupBox_5)
+        self.label_10.setObjectName(u"label_10")
+
+        self.verticalLayout_5.addWidget(self.label_10)
+
+        self.tw_phones = QTableView(self.groupBox_5)
+        self.tw_phones.setObjectName(u"tw_phones")
+
+        self.verticalLayout_5.addWidget(self.tw_phones)
+
+
+        self.horizontalLayout_2.addLayout(self.verticalLayout_5)
+
+        self.verticalLayout_6 = QVBoxLayout()
+        self.verticalLayout_6.setObjectName(u"verticalLayout_6")
+        self.label_20 = QLabel(self.groupBox_5)
+        self.label_20.setObjectName(u"label_20")
+        self.label_20.setAlignment(Qt.AlignCenter)
+
+        self.verticalLayout_6.addWidget(self.label_20)
+
+        self.le_name = QLineEdit(self.groupBox_5)
+        self.le_name.setObjectName(u"le_name")
+
+        self.verticalLayout_6.addWidget(self.le_name)
+
+        self.label_21 = QLabel(self.groupBox_5)
+        self.label_21.setObjectName(u"label_21")
+        self.label_21.setAlignment(Qt.AlignCenter)
+
+        self.verticalLayout_6.addWidget(self.label_21)
+
+        self.lineEdit_5 = QLineEdit(self.groupBox_5)
+        self.lineEdit_5.setObjectName(u"lineEdit_5")
+        self.lineEdit_5.setEnabled(False)
+
+        self.verticalLayout_6.addWidget(self.lineEdit_5)
+
+        self.label_11 = QLabel(self.groupBox_5)
+        self.label_11.setObjectName(u"label_11")
+        self.label_11.setAlignment(Qt.AlignCenter)
+        self.label_11.setWordWrap(True)
+
+        self.verticalLayout_6.addWidget(self.label_11)
+
+        self.le_divisions = QLineEdit(self.groupBox_5)
+        self.le_divisions.setObjectName(u"le_divisions")
+
+        self.verticalLayout_6.addWidget(self.le_divisions)
+
+        self.label_12 = QLabel(self.groupBox_5)
+        self.label_12.setObjectName(u"label_12")
+        self.label_12.setAlignment(Qt.AlignCenter)
+        self.label_12.setWordWrap(True)
+
+        self.verticalLayout_6.addWidget(self.label_12)
+
+        self.le_personals = QLineEdit(self.groupBox_5)
+        self.le_personals.setObjectName(u"le_personals")
+
+        self.verticalLayout_6.addWidget(self.le_personals)
+
+        self.label_17 = QLabel(self.groupBox_5)
+        self.label_17.setObjectName(u"label_17")
+
+        self.verticalLayout_6.addWidget(self.label_17)
+
+        self.btn_save_divisions = QPushButton(self.groupBox_5)
+        self.btn_save_divisions.setObjectName(u"btn_save_divisions")
+
+        self.verticalLayout_6.addWidget(self.btn_save_divisions)
+
+        self.label_18 = QLabel(self.groupBox_5)
+        self.label_18.setObjectName(u"label_18")
+
+        self.verticalLayout_6.addWidget(self.label_18)
+
+        self.label_19 = QLabel(self.groupBox_5)
+        self.label_19.setObjectName(u"label_19")
+
+        self.verticalLayout_6.addWidget(self.label_19)
+
+        self.label_16 = QLabel(self.groupBox_5)
+        self.label_16.setObjectName(u"label_16")
+
+        self.verticalLayout_6.addWidget(self.label_16)
+
+        self.label_15 = QLabel(self.groupBox_5)
+        self.label_15.setObjectName(u"label_15")
+
+        self.verticalLayout_6.addWidget(self.label_15)
+
+        self.label_14 = QLabel(self.groupBox_5)
+        self.label_14.setObjectName(u"label_14")
+
+        self.verticalLayout_6.addWidget(self.label_14)
+
+        self.label_13 = QLabel(self.groupBox_5)
+        self.label_13.setObjectName(u"label_13")
+
+        self.verticalLayout_6.addWidget(self.label_13)
+
+
+        self.horizontalLayout_2.addLayout(self.verticalLayout_6)
+
+
+        self.gridLayout_2.addWidget(self.groupBox_5, 0, 1, 1, 1)
+
         self.tabWidget.addTab(self.tab_2, "")
 
         self.verticalLayout.addWidget(self.tabWidget)
@@ -236,8 +368,8 @@ class Ui_MainWindow(object):
 
         self.tabWidget.setCurrentIndex(0)
 
-        QMetaObject.connectSlotsByName(MainWindow)
 
+        QMetaObject.connectSlotsByName(MainWindow)
     # setupUi
 
     def retranslateUi(self, MainWindow):
@@ -253,30 +385,81 @@ class Ui_MainWindow(object):
         self.label_4.setText("")
         self.groupBox_3.setTitle(QCoreApplication.translate("MainWindow", u"\u0420\u0430\u0441\u0445\u043e\u0434\u044b", None))
         self.label_5.setText(QCoreApplication.translate("MainWindow", u"\u0410\u0431\u043e\u043d\u0435\u043d\u0442\u0441\u043a\u0430\u044f \u043f\u043b\u0430\u0442\u0430", None))
-        self.le_subscription.setPlaceholderText(QCoreApplication.translate("MainWindow", u"4200", None))
+        self.le_subscription.setPlaceholderText(QCoreApplication.translate("MainWindow", u"3500", None))
         self.label_6.setText(QCoreApplication.translate("MainWindow", u"\u0412\u043d\u0443\u0442\u0440\u0435\u043d\u043d\u0438\u0435 \u043d\u043e\u043c\u0435\u0440\u0430", None))
         self.le_personal.setPlaceholderText(QCoreApplication.translate("MainWindow", u"10000", None))
         self.label_7.setText(QCoreApplication.translate("MainWindow", u"\u041e\u0442\u0434\u0435\u043b\u044b", None))
-        self.le_divisions.setPlaceholderText(QCoreApplication.translate("MainWindow", u"900", None))
+        self.le_divisions_cost.setPlaceholderText(QCoreApplication.translate("MainWindow", u"900", None))
         self.label_8.setText(QCoreApplication.translate("MainWindow", u"\u041c\u0438\u043d\u0443\u0442\u044b", None))
         self.le_minuts.setPlaceholderText(QCoreApplication.translate("MainWindow", u"23500", None))
         self.label_9.setText(QCoreApplication.translate("MainWindow", u"\u0426\u0435\u043d\u0430 \u0437\u0430 \u043d\u043e\u043c\u0435\u0440", None))
         self.le_cost_for_number.setPlaceholderText(QCoreApplication.translate("MainWindow", u"160", None))
         self.btn_from_invoice.setText(QCoreApplication.translate("MainWindow", u"\u0417\u0430\u043f\u043e\u043b\u043d\u0438\u0442\u044c \u0438\u0437 \u0441\u0447\u0451\u0442\u0430", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QCoreApplication.translate("MainWindow", u"\u041e\u0442\u0447\u0451\u0442", None))
+        self.groupBox_4.setTitle(QCoreApplication.translate("MainWindow", u"\u041e\u0442\u0434\u0435\u043b\u044b", None))
+        self.groupBox_5.setTitle(QCoreApplication.translate("MainWindow", u"\u041d\u0430\u0441\u0442\u0440\u043e\u0439\u043a\u0438", None))
+        self.label_10.setText(QCoreApplication.translate("MainWindow", u"\u0422\u0435\u043b\u0435\u0444\u043e\u043d\u044b \u043e\u0442\u0434\u0435\u043b\u0430", None))
+        self.label_20.setText(QCoreApplication.translate("MainWindow", u"\u041d\u0430\u0437\u0432\u0430\u043d\u0438\u0435", None))
+        self.label_21.setText(QCoreApplication.translate("MainWindow", u"ID", None))
+        self.label_11.setText(QCoreApplication.translate("MainWindow", u"\u041a\u043e\u043b\u0438\u0447\u0435\u0441\u0442\u0432\u043e \u043e\u0442\u0434\u0435\u043b\u043e\u0432", None))
+        self.label_12.setText(QCoreApplication.translate("MainWindow", u"\u041a\u043e\u043b\u0438\u0447\u0435\u0441\u0442\u0432\u043e \u0441\u043e\u0442\u0440\u0443\u0434\u043d\u0438\u043a\u043e\u0432", None))
+        self.label_17.setText("")
+        self.btn_save_divisions.setText(QCoreApplication.translate("MainWindow", u"\u0421\u043e\u0445\u0440\u0430\u043d\u0438\u0442\u044c \u0438\u0437\u043c\u0435\u043d\u0435\u043d\u0438\u044f", None))
+        self.label_18.setText("")
+        self.label_19.setText("")
+        self.label_16.setText("")
+        self.label_15.setText("")
+        self.label_14.setText("")
+        self.label_13.setText("")
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), QCoreApplication.translate("MainWindow", u"\u041d\u0430\u0441\u0442\u0440\u043e\u0439\u043a\u0438 \u043e\u0442\u0434\u0435\u043b\u043e\u0432", None))
     # retranslateUi
 
-    def initui(self, MainWindow):
+    def init_ui(self, MainWindow):
         self.btn_read.clicked.connect(self.read)
         self.btn_calculate.clicked.connect(self.calculate)
         self.btn_from_invoice.clicked.connect(self.from_invoice)
         self.btn_save_report.clicked.connect(self.save_report)
+        self.btn_save_divisions.clicked.connect(self.save_divisions)
         self.le_subscription.setText('4200')
         self.le_personal.setText('10000')
-        self.le_divisions.setText('900')
+        self.le_divisions_cost.setText('900')
         self.le_minuts.setText('24000')
         self.le_cost_for_number.setText('160')
+        self.tabWidget.currentChanged.connect(self.load_settings)
+        self.lv_divisions.clicked.connect(self.get_info)
+        self.phones = get_phones()
+        self.divisions = load_divisions()
+        self.set_settings(self.divisions, self.phones)
+        self.btn_save_divisions.setDisabled(True)
+
+    def set_settings(self, _divisions, _phones):
+        div = _divisions['name'].tolist()
+        div.sort()
+        slm = QStringListModel(div)
+        self.lv_divisions.setModel(slm)
+
+    def get_info(self):
+        self.btn_save_divisions.setEnabled(True)
+        _id = self.divisions[self.divisions.name == self.lv_divisions.currentIndex().data()].iloc[0]['id']
+        self.le_name.setText(self.lv_divisions.currentIndex().data())
+        self.lineEdit_5.setText(str(_id))
+        self.le_divisions.setText(str(self.divisions[self.divisions.id == _id].iloc[0]['departments']))
+        self.le_personals.setText(str(self.divisions[self.divisions.id == _id].iloc[0]['employees']))
+
+        phones_by_division = self.phones[self.phones.division_id == _id][['number', 'description']].reset_index(drop=True)
+        phones_by_division.columns = ['Номер', 'Описание']
+        model = PandasModel(phones_by_division)
+        self.tw_phones.setModel(model)
+        self.tw_phones.resizeColumnsToContents()
+        # self.tw_phones.inde
+
+    def load_settings(self):
+        if self.tabWidget.currentIndex():
+            pass
+
+    def save_divisions(self):
+        self
+        pass
 
     def from_invoice(self):
         path = QFileDialog.getOpenFileName(
@@ -304,7 +487,7 @@ class Ui_MainWindow(object):
                     subscription_cost += float(value)
                 if 'Минут' in row[0]:
                     minutes_cost += float(value)
-            self.le_divisions.setText(str(round(divisions_cost, 2)))
+            self.le_divisions_cost.setText(str(round(divisions_cost, 2)))
             self.le_personal.setText(str(round(personal_cost, 2)))
             self.le_subscription.setText(str(round(subscription_cost, 2)))
             self.le_minuts.setText(str(round(minutes_cost, 2)))
@@ -348,7 +531,7 @@ class Ui_MainWindow(object):
                                      self.end_date.date().day())
         _divisions = calculate_expenses_by_divisions(
                                                     float(self.le_personal.text()),
-                                                    float(self.le_divisions.text()),
+                                                    float(self.le_divisions_cost.text()),
                                                     float(self.le_subscription.text()))
         _phones = calculate_expenses_by_numbers(
                                                 float(self.le_cost_for_number.text()),
@@ -382,7 +565,7 @@ class MainWindow(QMainWindow):
         super().__init__(parent)
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
-        self.ui.initui(self)
+        self.ui.init_ui(self)
 
 
 if __name__ == "__main__":
