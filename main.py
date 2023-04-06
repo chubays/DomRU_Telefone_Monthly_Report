@@ -98,21 +98,21 @@ def calc_phones_cost_to_division(df=get_phones(), cost_per_number=160):
 
 
 def calc_employee_cost(df=load_divisions(), total_cost=10000.0):
-    return total_cost / df.employees.sum()
+    return round(total_cost / df.employees.sum(), 2)
 
 
 def calculate_sum_for_employees(df=load_divisions(), total_cost=10000.0):
     emp = calc_employee_cost(df, total_cost)
-    df['cost_for_employees'] = round(df['employees'] * emp, 2)
+    df['cost_for_employees'] = df['employees'] * emp
 
 
 def calc_department_cost(df=load_divisions(), total_cost=900):
-    return total_cost / df.departments.sum()
+    return round(total_cost / df.departments.sum(), 2)
 
 
 def calc_sum_for_departments(df=load_divisions(), total_cost=900):
     dep = calc_department_cost(df, total_cost)
-    df['cost_for_departments'] = round(df['departments'] * dep, 2)
+    df['cost_for_departments'] = df['departments'] * dep
 
 
 def calc_subscription_cost(df=load_divisions(), total_cost=900):
@@ -151,7 +151,7 @@ def calculate_expenses_by_numbers(number_cost, start_date, end_date, conversatio
     # Считаем стоимость секунды
     sec_cost = calc_price_sec(division_duration, conversation_cost)
     # Пишем столбец со стоимостью разговоров для подразделения
-    division_duration['cost_for_calls'] = round(division_duration['duration'] * sec_cost, 2)
+    division_duration['cost_for_calls'] = round(division_duration['duration'].astype(int) * sec_cost, 2)
     # Получаем датафрейм со стоимостью звонков и номеров телефона
     merged = division_duration.merge(phones_cost, on='division_id')
     merged.columns = ['id', 'duration', 'cost_for_calls', 'cost_for_numbers']

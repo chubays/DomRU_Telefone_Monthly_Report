@@ -5,10 +5,11 @@ from main import *
 from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
                             QMetaObject, QObject, QPoint, QRect,
                             QSize, QTime, QUrl, Qt, QAbstractTableModel, QModelIndex, QStringListModel)
-from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
+"""from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
                            QFont, QFontDatabase, QGradient, QIcon,
                            QImage, QKeySequence, QLinearGradient, QPainter,
                            QPalette, QPixmap, QRadialGradient, QTransform)
+"""
 from PySide6.QtWidgets import (QApplication, QDateEdit, QGroupBox, QHBoxLayout,
                                QHeaderView, QLabel, QMainWindow, QPushButton,
                                QSizePolicy, QStatusBar, QTabWidget, QTableWidget,
@@ -458,7 +459,7 @@ class Ui_MainWindow(object):
             pass
 
     def save_divisions(self):
-        self
+
         pass
 
     def from_invoice(self):
@@ -485,7 +486,7 @@ class Ui_MainWindow(object):
                         'Интеграция с CRM' in row[0] or \
                         'Алгоритм распред' in row[0]:
                     subscription_cost += float(value)
-                if 'Минут' in row[0]:
+                if 'Минут' in row[0] or 'Соединения по сети передачи данных' in row[0]:
                     minutes_cost += float(value)
             self.le_divisions_cost.setText(str(round(divisions_cost, 2)))
             self.le_personal.setText(str(round(personal_cost, 2)))
@@ -542,12 +543,11 @@ class Ui_MainWindow(object):
         self.tableView.horizontalHeader().setStretchLastSection(True)
         self.tableView.setAlternatingRowColors(True)
         self.tableView.setSelectionBehavior(QTableWidget.SelectionBehavior.SelectRows)
-        _final['total'] = round(_final['cost_for_employees'] +
-                                _final['cost_for_departments'] +
-                                _final['cost_for_subscription'] +
-                                _final['cost_for_calls'] +
-                                _final['cost_for_numbers'],
-                                2)
+        _final['total'] = _final['cost_for_employees'] + \
+                                _final['cost_for_departments'] + \
+                                _final['cost_for_subscription'] + \
+                                _final['cost_for_calls'] + \
+                                _final['cost_for_numbers']
         self.to_model = _final[['name', 'cost_for_employees', 'cost_for_departments', 'cost_for_subscription',
                           'cost_for_calls', 'cost_for_numbers', 'total']]
         self.to_model.columns = ['Отдел', 'Сотрудники', 'Отделы', 'Абонентка', 'Звонки', 'Номера', 'Общая сумма']
