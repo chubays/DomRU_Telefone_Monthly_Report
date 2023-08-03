@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import sys
-from main import *
+
 
 from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
                             QMetaObject, QObject, QPoint, QRect,

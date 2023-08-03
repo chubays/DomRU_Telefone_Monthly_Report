@@ -1,7 +1,6 @@
 import sys
 
 import pandas as pd
-from pathlib import Path
 import datetime
 import pdfplumber
 from PySide6.QtCore import QDate, QAbstractTableModel, QModelIndex, Qt, QStringListModel

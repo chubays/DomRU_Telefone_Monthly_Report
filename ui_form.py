@@ -208,7 +208,7 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_5.addWidget(self.label_10)
 
-        self.tw_phones = QTableWidget(self.groupBox_5)
+        self.tw_phones = QTableView(self.groupBox_5)
         self.tw_phones.setObjectName(u"tw_phones")
 
         self.verticalLayout_5.addWidget(self.tw_phones)
