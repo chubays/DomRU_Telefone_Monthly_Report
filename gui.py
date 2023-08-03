@@ -121,6 +121,10 @@ class Ui_MainWindow(object):
         self.end_date.setEnabled(False)
         self.end_date.setCalendarPopup(True)
 
+        self.btn_request = QPushButton(self.groupBox_2)
+        self.btn_request.setObjectName(u"btn_request")
+
+
         self.verticalLayout_3.addWidget(self.end_date)
 
 
@@ -416,10 +420,11 @@ class Ui_MainWindow(object):
     # retranslateUi
 
     def init_ui(self, MainWindow):
-        self.btn_read.clicked.connect(self.read)
-        self.btn_calculate.clicked.connect(self.calculate)
-        self.btn_from_invoice.clicked.connect(self.from_invoice)
-        self.btn_save_report.clicked.connect(self.save_report)
+#        self.btn_read.clicked.connect(self.read)
+#        self.btn_calculate.clicked.connect(self.calculate)
+#        self.btn_request.clicked.connect(self.request_history)
+#        self.btn_from_invoice.clicked.connect(self.from_invoice)
+#        self.btn_save_report.clicked.connect(self.save_report)
         self.btn_save_divisions.clicked.connect(self.save_divisions)
         self.le_subscription.setText('4200')
         self.le_personal.setText('10000')
@@ -522,6 +527,57 @@ class Ui_MainWindow(object):
         self.start_date.setEnabled(True)
         self.end_date.setEnabled(True)
         self.btn_calculate.setEnabled(True)
+
+    def calculate2(self, call_history):
+        # Считаем затраты на подразделения (сотрудники, отделы)
+        _divisions = calculate_expenses_by_divisions(
+            float(self.le_personal.text()),
+            float(self.le_divisions_cost.text()),
+            float(self.le_subscription.text()))
+        # Считаем затраты по номерам
+        _phones = calculate_expenses_by_numbers2(call_history,
+            float(self.le_cost_for_number.text()),
+            float(self.le_minuts.text()))
+        print(_phones)
+        _final = _divisions.merge(_phones, on='id')
+        self.tableView.horizontalHeader().setStretchLastSection(True)
+        self.tableView.setAlternatingRowColors(True)
+        self.tableView.setSelectionBehavior(QTableWidget.SelectionBehavior.SelectRows)
+        _final['total'] = _final['cost_for_employees'] + \
+                          _final['cost_for_departments'] + \
+                          _final['cost_for_subscription'] + \
+                          _final['cost_for_calls'] + \
+                          _final['cost_for_numbers']
+        self.to_model = _final[['name', 'cost_for_employees', 'cost_for_departments', 'cost_for_subscription',
+                                'cost_for_calls', 'cost_for_numbers', 'total']]
+        self.to_model.columns = ['Отдел', 'Сотрудники', 'Отделы', 'Абонентка', 'Звонки', 'Номера', 'Общая сумма']
+        model = PandasModel(self.to_model)
+        self.tableView.setModel(model)
+        # self.tableWidget.resizeRowsToContents()
+        self.tableView.resizeColumnsToContents()
+        self.btn_save_report.setEnabled(True)
+
+    def request_history(self, start_date_='', end_date='', period='last_month'):
+        global CALL_HISTORY
+        with open(r'config/cfg.json', 'r') as f:
+            text = json.load(f)
+        token = text['token']
+        path_to_api = text['path_to_api']
+        json_history = '/crmapi/v1/history/json'
+        headers = {'X-API-KEY': token}
+        params = {'type': 'out'}
+        # TODO
+#        if start_date_ != '':
+#            params['start'] = start_date_
+#        if end_date != '':
+#            params['end'] = end_date
+        if period != '':
+            params['period'] = period
+        r = requests.get(path_to_api + json_history, headers=headers, params=params)
+        df = pd.json_normalize(r.json())
+        CALL_HISTORY = df.query('status == "success"')
+        self.calculate2(df.query('status == "success"'))
+#        return df.query('status == "success"')
 
     def calculate(self):
         _start_date = datetime.datetime(self.start_date.date().year(),
