@@ -94,10 +94,10 @@ class Window(QMainWindow):
         self.ui.btn_calculate.clicked.connect(self.calculate)
         self.ui.btn_save_report.clicked.connect(self.save_report)
 
-        self.ui.le_subscription.setText('4200')
-        self.ui.le_personal.setText('10000')
+        self.ui.le_subscription.setText('4500')
+        self.ui.le_personal.setText('10600')
         self.ui.le_divisions_cost.setText('900')
-        self.ui.le_minuts.setText('24000')
+        self.ui.le_minuts.setText('23000')
         self.ui.le_cost_for_number.setText('160')
 #        self.ui.tabWidget.currentChanged.connect(self.load_settings)
         self.ui.lv_divisions.clicked.connect(self.get_info)
@@ -247,9 +247,21 @@ def request_history(start_date_='', end_date='', period='last_month'):
     return df.query('status == "success"')
 
 
-#    print(CALL_HISTORY)
-#    calculate2(df.query('status == "success"'))
-#        return df.query('status == "success"')
+def calc_emp_by_divisions():
+    with open(r'config/cfg.json', 'r') as f:
+        text = json.load(f)
+    token = text['token']
+    path_to_api = text['path_to_api']
+    json_users = '/crmapi/v1/users'
+    headers = {'X-API-KEY': token}
+    r = requests.get(path_to_api + json_users, headers=headers)
+    users = json.loads(r.text)
+    total_users = users['info']['limit']
+    pronina = 0
+    for user in users['items']:
+       if (user['ext'][0] == '4'):
+           pronina += 1
+    return pronina, total_users
 
 
 def to_seconds(val):
@@ -291,7 +303,12 @@ def load_divisions():
     Read information about divisions
     :return: dataframe with divisions
     """
+    pronina, total = calc_emp_by_divisions()
     df = pd.read_csv(r'config/divisions.csv', sep=';')
+    index_to_change = df[df['name'] == 'Пронина'].index[0]
+    df.at[index_to_change, 'employees'] = pronina
+    if df.employees.sum() != total:
+        print ('somthing wrong with employees')
     return df
 
 
@@ -370,12 +387,12 @@ def calc_subscription_cost(df=load_divisions(), total_cost=900):
     return total_cost / df.id.count()
 
 
-def calc_subscription_sum_by_departments(df=load_divisions(), total_cost=4200):
+def calc_subscription_sum_by_departments(df=load_divisions(), total_cost=4500):
     sub = calc_subscription_cost(df, total_cost)
     df['cost_for_subscription'] = round(sub, 2)
 
 
-def calculate_expenses_by_divisions(employees_cost=10160.97, departments_cost=900, subscription_fee=4200,
+def calculate_expenses_by_divisions(employees_cost=10160.97, departments_cost=900, subscription_fee=4500,
                                     divisions=load_divisions()):
     calculate_sum_for_employees(divisions, employees_cost)
     calc_sum_for_departments(divisions, departments_cost)
